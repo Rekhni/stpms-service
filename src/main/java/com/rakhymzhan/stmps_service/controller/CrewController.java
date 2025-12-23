@@ -12,7 +12,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/crews")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:9000") // порт фронта
+@CrossOrigin(origins = {
+        "http://localhost:9000",
+        "https://my-telecom-app.onrender.com"
+}) // порт фронта
 public class CrewController {
 
     private final CrewService crewService;

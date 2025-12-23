@@ -13,7 +13,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/pprs")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:9000") // лучше настроить нормально, но для dev ок
+@CrossOrigin(origins = {
+        "http://localhost:9000",
+        "https://my-telecom-app.onrender.com"
+}) // лучше настроить нормально, но для dev ок
 public class PprPlanController {
 
     private final PprPlanService pprPlanService;
