@@ -13,7 +13,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:9000")
+@CrossOrigin(origins = {
+        "http://localhost:9000",
+        "https://my-telecom-app.onrender.com"
+})
 public class UserController {
 
     private final UserService userService;
