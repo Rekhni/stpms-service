@@ -59,4 +59,8 @@ public class UserService {
                 user.getPhoneNumber()
         );
     }
+
+    public void deleteUser(Long id)  {
+        userRepo.deleteById(id);
+    }
 }

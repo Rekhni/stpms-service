@@ -1,8 +1,7 @@
 package com.rakhymzhan.stmps_service.controller;
 
+import com.rakhymzhan.stmps_service.model.dto.*;
 import jakarta.validation.Valid;
-import com.rakhymzhan.stmps_service.model.dto.PprCreateRequest;
-import com.rakhymzhan.stmps_service.model.dto.PprResponse;
 import com.rakhymzhan.stmps_service.service.PprPlanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,5 +29,18 @@ public class PprPlanController {
     @ResponseStatus(HttpStatus.CREATED)
     public PprResponse create(@Valid @RequestBody PprCreateRequest request) {
         return pprPlanService.create(request);
+    }
+
+    @PutMapping("/{id}")
+    public PprResponse updatePpr(
+            @PathVariable Long id,
+            @RequestBody PprUpdateRequest request
+    ) {
+        return pprPlanService.updatePpr(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletePpr(@PathVariable Long id) {
+        pprPlanService.deletePpr(id);
     }
 }

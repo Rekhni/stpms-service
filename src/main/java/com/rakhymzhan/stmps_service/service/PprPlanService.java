@@ -4,6 +4,7 @@ import com.rakhymzhan.stmps_service.model.dto.PprCreateRequest;
 import com.rakhymzhan.stmps_service.model.dto.PprResponse;
 import com.rakhymzhan.stmps_service.model.Crew;
 import com.rakhymzhan.stmps_service.model.PprPlan;
+import com.rakhymzhan.stmps_service.model.dto.PprUpdateRequest;
 import com.rakhymzhan.stmps_service.repo.CrewRepo;
 import com.rakhymzhan.stmps_service.repo.PprPlanRepo;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,32 @@ public class PprPlanService {
         return toResponse(plan);
     }
 
+    @Transactional
+    public PprResponse updatePpr(Long id, PprUpdateRequest req) {
+        PprPlan ppr = pprPlanRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Ppr not found, id=" + id));
+
+        Crew crew = crewRepo.findById(req.getCrewId())
+                .orElseThrow(() -> new IllegalArgumentException("Crew not found, id=" + id));
+
+        ppr.setType(req.getType().trim());
+        ppr.setLocation(req.getLocation().trim());
+        ppr.setCrew(crew);
+
+        validateQuarterDate(req.getQ1Date(), 1);
+        validateQuarterDate(req.getQ2Date(), 2);
+        validateQuarterDate(req.getQ3Date(), 3);
+        validateQuarterDate(req.getQ4Date(), 4);
+
+        ppr.setQ1Date(req.getQ1Date());
+        ppr.setQ2Date(req.getQ2Date());
+        ppr.setQ3Date(req.getQ3Date());
+        ppr.setQ4Date(req.getQ4Date());
+
+        PprPlan saved = pprPlanRepo.save(ppr);
+        return toResponse(saved);
+    }
+
     private PprResponse toResponse(PprPlan p) {
         Crew c = p.getCrew();
 
@@ -94,5 +121,9 @@ public class PprPlanService {
         if (!ok) {
             throw new IllegalArgumentException("Date " + d + " is not in quarter " + q);
         }
+    }
+
+    public void deletePpr(Long id) {
+        pprPlanRepo.deleteById(id);
     }
 }
