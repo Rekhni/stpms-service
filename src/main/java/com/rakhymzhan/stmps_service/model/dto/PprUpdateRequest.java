@@ -14,9 +14,6 @@ public class PprUpdateRequest {
     @NotBlank
     private String location;
 
-    @NotNull
-    private Long crewId;
-
     private LocalDate q1Date;
     private LocalDate q2Date;
     private LocalDate q3Date;

@@ -30,9 +30,6 @@ public class PprPlanService {
 
     @Transactional
     public PprResponse create(PprCreateRequest req) {
-        Crew crew = crewRepo.findById(req.getCrewId())
-                .orElseThrow(() -> new IllegalArgumentException("Crew not found: " + req.getCrewId()));
-
         // (Опционально) простая проверка кварталов — можно расширить
         validateQuarterDate(req.getQ1Date(), 1);
         validateQuarterDate(req.getQ2Date(), 2);
@@ -42,7 +39,6 @@ public class PprPlanService {
         PprPlan plan = PprPlan.builder()
                 .type(req.getType().trim())
                 .location(req.getLocation().trim())
-                .crew(crew)
                 .q1Date(req.getQ1Date())
                 .q2Date(req.getQ2Date())
                 .q3Date(req.getQ3Date())
@@ -58,12 +54,8 @@ public class PprPlanService {
         PprPlan ppr = pprPlanRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Ppr not found, id=" + id));
 
-        Crew crew = crewRepo.findById(req.getCrewId())
-                .orElseThrow(() -> new IllegalArgumentException("Crew not found, id=" + id));
-
         ppr.setType(req.getType().trim());
         ppr.setLocation(req.getLocation().trim());
-        ppr.setCrew(crew);
 
         validateQuarterDate(req.getQ1Date(), 1);
         validateQuarterDate(req.getQ2Date(), 2);
@@ -80,27 +72,11 @@ public class PprPlanService {
     }
 
     private PprResponse toResponse(PprPlan p) {
-        Crew c = p.getCrew();
-
-        // если в Crew есть поле objectsQuantity - верни его.
-        // иначе оставь null.
-        Integer objectsQty = null;
-        try {
-            // если у тебя есть getObjectsQuantity()
-            // objectsQty = c.getObjectsQuantity();
-        } catch (Exception ignored) {}
-
-        String responsible = (c != null) ? c.getLeader().getFullName() : null;
 
         return PprResponse.builder()
                 .id(p.getId())
                 .type(p.getType())
                 .location(p.getLocation())
-                .crewId(c.getId())
-                .crewName(c.getName())
-                .leaderFullName(c.getLeader().getFullName())
-                .responsible(responsible)
-                .objectsQuantity(objectsQty)
                 .q1Date(p.getQ1Date())
                 .q2Date(p.getQ2Date())
                 .q3Date(p.getQ3Date())

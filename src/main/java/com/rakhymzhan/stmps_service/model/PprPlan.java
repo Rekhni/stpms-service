@@ -23,10 +23,6 @@ public class PprPlan {
     @Column(nullable = false, length = 500)
     private String location;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "crew_id", nullable = false)
-    private Crew crew;
-
     private LocalDate q1Date;
     private LocalDate q2Date;
     private LocalDate q3Date;
